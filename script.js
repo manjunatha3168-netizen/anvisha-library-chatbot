@@ -1,4 +1,3 @@
-// Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBSwFIZppWBQLjHn4ZDRk0aYZ_n9qrgroE",
     authDomain: "kcw-library-bot.firebaseapp.com",
@@ -6,105 +5,74 @@ const firebaseConfig = {
     databaseURL: "https://kcw-library-bot-default-rtdb.firebaseio.com/"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const auth = firebase.auth();
-
 let libraryData = [];
 
-// Fetch Knowledge Base
-db.ref('library_knowledge').on('value', snapshot => {
-    const data = snapshot.val();
-    if (data) {
-        libraryData = Object.entries(data).map(([key, val]) => ({ id: key, ...val }));
+// Load data from Firebase
+db.ref('library_knowledge').on('value', s => {
+    const d = s.val();
+    if (d) {
+        libraryData = Object.entries(d).map(([k, v]) => ({ id: k, ...v }));
         renderFAQList();
     }
 });
 
-// Message Handling
+function toggleChat() {
+    const w = document.getElementById("bot-window");
+    w.style.display = (w.style.display === "flex") ? "none" : "flex";
+}
+
+function switchTab(t) {
+    const isChat = t === 'chat';
+    document.getElementById('chat-content').style.display = isChat ? 'flex' : 'none';
+    document.getElementById('faq-content').style.display = isChat ? 'none' : 'block';
+    document.getElementById("btn-chat-tab").classList.toggle("active-tab", isChat);
+    document.getElementById("btn-faq-tab").classList.toggle("active-tab", !isChat);
+}
+
 function appendMsg(content, type) {
     const chat = document.getElementById("chat");
     const row = document.createElement("div");
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
     row.className = `msg-row ${type}-row`;
-    row.innerHTML = type === 'bot' 
-        ? `<div class="bot-avatar">A</div><div class="bot">${content}<span class="timestamp">${time}</span></div>`
-        : `<div class="user">${content}<span class="timestamp">${time}</span></div>`;
-    
+    row.innerHTML = `<div class="${type}">${content}</div>`;
     chat.appendChild(row);
-    chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
-}
-
-function botResponse(content) {
-    const typing = document.getElementById("typing");
-    typing.style.display = "block";
-    const delay = Math.min(Math.max(content.length * 12, 600), 1800);
-    
-    setTimeout(() => {
-        typing.style.display = "none";
-        appendMsg(content, "bot");
-    }, delay);
-}
-
-// Search Logic (Information Retrieval)
-function matchAndReply(input) {
-    const query = input.toLowerCase().trim();
-    
-    // Greeting Match
-    const wishPattern = /^(hi+|hello+|hey+|hai+|vanakkam|வணக்கம்)/i;
-    if (wishPattern.test(query)) {
-        botResponse("Vanakam! 🙏 Welcome to KCW Library. How can I assist you today?");
-        return;
-    }
-
-    // CMS Trigger
-    if (query === "cms") {
-        switchTab('faq');
-        document.getElementById('admin-login-screen').style.display = 'block';
-        return;
-    }
-
-    // Weighted Keyword Scoring
-    let bestMatch = { score: 0, answer: "" };
-    libraryData.forEach(item => {
-        let currentScore = 0;
-        const keywords = item.k ? item.k.toLowerCase().split(',') : [];
-        
-        keywords.forEach(kw => {
-            if (query.includes(kw.trim())) currentScore += 0.6;
-        });
-
-        if (query.includes(item.q.toLowerCase())) currentScore += 0.8;
-
-        if (currentScore > bestMatch.score) {
-            bestMatch = { score: currentScore, answer: item.a };
-        }
-    });
-
-    if (bestMatch.score >= 0.5) {
-        botResponse(bestMatch.answer);
-    } else {
-        showFallback(query);
-    }
-}
-
-// UI Controls
-function toggleChat() {
-    const win = document.getElementById("bot-window");
-    win.style.display = win.style.display === "flex" ? "none" : "flex";
+    chat.scrollTo(0, chat.scrollHeight);
 }
 
 function send() {
-    const msgInput = document.getElementById("msg");
-    if (!msgInput.value.trim()) return;
-    
-    appendMsg(msgInput.value, "user");
-    matchAndReply(msgInput.value);
-    msgInput.value = "";
-    document.getElementById("suggestion-container").style.display = "none";
+    const input = document.getElementById("msg");
+    const val = input.value.trim();
+    if (!val) return;
+
+    appendMsg(val, "user");
+    input.value = "";
+
+    document.getElementById("typing").style.display = "block";
+
+    setTimeout(() => {
+        document.getElementById("typing").style.display = "none";
+        const query = val.toLowerCase();
+        let match = libraryData.find(item => query.includes(item.q.toLowerCase()));
+        
+        if (match) {
+            appendMsg(match.a, "bot");
+        } else {
+            appendMsg("I couldn't find an exact answer. Try asking about library timings, books, or contact our team via FAQ tab.", "bot");
+        }
+    }, 800);
 }
 
-// Initial Welcome
-window.onload = () => botResponse("Welcome to KCW Library and Information Centre. I am Anvisha, your virtual assistant.");
+function renderFAQList() {
+    const list = document.getElementById('faq-list');
+    list.innerHTML = libraryData.map(i => `
+        <div style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; font-size:13px;" 
+             onclick="appendMsg('${i.q}','user'); setTimeout(()=>appendMsg('${i.a.replace(/'/g,"")}', 'bot'), 500); switchTab('chat')">
+            <strong>Q:</strong> ${i.q}
+        </div>
+    `).join('');
+}
+
+function clearChat() { document.getElementById("chat").innerHTML = ""; }
+
+window.onload = () => appendMsg("Vanakam! I am Anvisha. How can I help you today?", "bot");
