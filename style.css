@@ -1,0 +1,144 @@
+:root {
+    --primary: #451842;
+    --bg: #f8f9fa;
+    --bot-bubble: #451842;
+    --user-bubble: #fff;
+    --whatsapp: #25D366;
+    --email: #EA4335;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: var(--bg);
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+    position: fixed;
+}
+
+/* Launcher Animation */
+@keyframes launcherAttention {
+    0%, 100% { transform: scale(1); }
+    10%, 30% { transform: scale(1.1) rotate(-5deg); }
+    20% { transform: scale(1.1) rotate(5deg); }
+}
+
+#chat-launcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 2000;
+    box-shadow: 0 6px 20px rgba(69,24,66,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: launcherAttention 5s ease-in-out infinite;
+}
+
+/* Container */
+.chatbot-container {
+    position: fixed;
+    bottom: 90px;
+    right: 15px;
+    left: 15px;
+    width: calc(100% - 30px);
+    max-width: 380px;
+    height: 70dvh;
+    background: #fff;
+    border-radius: 20px;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    z-index: 1000;
+    border: 1px solid rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+@media (min-width: 480px) {
+    .chatbot-container { left: auto; right: 25px; width: 360px; height: 600px; }
+}
+
+/* Messages */
+.messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #fdfdfd;
+}
+
+.bot {
+    background: var(--bot-bubble);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 15px 15px 15px 4px;
+    font-size: 13px;
+    max-width: 85%;
+}
+
+.user {
+    background: #fff;
+    border: 1px solid #ececec;
+    color: #333;
+    padding: 10px 14px;
+    border-radius: 15px 15px 4px 15px;
+    font-size: 13px;
+    max-width: 85%;
+}
+
+/* Admin Styles */
+.admin-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.admin-action-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Tab Bar */
+.tab-bar {
+    display: flex;
+    background: var(--primary);
+    height: 55px;
+}
+
+.tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-weight: 600;
+    opacity: .5;
+}
+
+.active-tab {
+    opacity: 1;
+    background: rgba(255,255,255,0.1);
+}
