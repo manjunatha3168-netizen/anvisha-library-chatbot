@@ -3,59 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>KCW Library Assistant - Anvisha</title>
+    <title>Anvisha - KCW Library Assistant</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="chat-launcher" onclick="toggleChat()">💬</button>
 
-    <div class="chatbot-container" id="bot-window">
-        <div class="header">
-            <span class="header-title">Anvisha</span>
-            <button onclick="endChat()" class="clear-btn">Clear</button>
-        </div>
+<button id="chat-launcher" onclick="toggleChat()">💬</button>
 
-        <div id="chat-content" class="tab-content">
-            <div id="chat" class="messages"></div>
-            <div id="typing">Anvisha is typing...</div>
-            <div class="input-area">
-                <div id="suggestion-container" class="suggestion-box" style="display:none"></div>
-                <input id="msg" placeholder="Type a message..." oninput="showLiveSuggestions()" onkeypress="if(event.key==='Enter')send()">
-                <button onclick="send()" class="send-btn">➤</button>
-            </div>
-        </div>
+<div class="chatbot-container" id="bot-window">
+    <div class="header">
+        <span class="header-title">Anvisha</span>
+        <button onclick="clearChat()" class="clear-btn">CLEAR</button>
+    </div>
 
-        <div id="faq-content" class="tab-content faq-view" style="display:none">
-            <input id="faq-search" class="search-bar" placeholder="🔍 Search library FAQs..." oninput="filterFAQList()">
-            
-            <div id="admin-login-screen" class="admin-box" style="display:none">
-                <input type="email" id="admin-email" placeholder="Email">
-                <input type="password" id="admin-password" placeholder="Password">
-                <button onclick="loginAdmin()" class="admin-action-btn">LOGIN</button>
-                <button onclick="cancelAdmin()" class="cancel-btn">Go Back</button>
-            </div>
+    <div class="tab-bar">
+        <button onclick="switchTab('chat')" id="btn-chat-tab" class="tab-btn active-tab">CHAT</button>
+        <button onclick="switchTab('faq')" id="btn-faq-tab" class="tab-btn">FAQ</button>
+    </div>
 
-            <div id="admin-panel" class="admin-box" style="display:none;border:2px solid var(--primary)">
-                <input id="admin-q" placeholder="The Question">
-                <input id="admin-a" placeholder="The Answer">
-                <input id="admin-k" placeholder="Keywords">
-                <button onclick="addFAQ()" class="admin-action-btn">SAVE FAQ</button>
-                <button onclick="logoutAdmin()" class="logout-btn">LOGOUT</button>
-            </div>
-
-            <div id="faq-list"></div>
-        </div>
-
-        <div class="tab-bar">
-            <button onclick="switchTab('chat')" id="btn-chat-tab" class="tab-btn active-tab">CHAT</button>
-            <button onclick="switchTab('faq')" id="btn-faq-tab" class="tab-btn">FAQ</button>
+    <div id="chat-content" class="tab-view">
+        <div id="chat" class="messages"></div>
+        <div id="typing">Anvisha is typing...</div>
+        <div class="input-area">
+            <input id="msg" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')send()">
+            <button onclick="send()" class="send-btn">➤</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="faq-content" class="tab-view" style="display:none;">
+        <div id="faq-list"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
