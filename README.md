@@ -5,7 +5,7 @@ Anvisha is an intelligent, keyword-based chatbot designed for the **PSGR Krishna
 Key Features
 - **Keyword-Driven Retrieval:** Uses weighted scoring logic to match user queries with library knowledge.
 - **Firebase Integration:** Real-time database (RTDB) for dynamic FAQ management and administrative updates.
-- **Library CMS:** Includes a hidden "CMS" mode for librarians to update the knowledge base without coding.
+- **Library CMS:** Includes a hidden "***" mode for librarians to update the knowledge base without coding.
 - **Accessibility & Reach:** Integrated WhatsApp and Email fallback systems to connect patrons directly with an Assistant Librarian.
 - **Mobile First:** Responsive design optimized for student use on smartphones.
 
