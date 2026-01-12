@@ -1,4 +1,4 @@
-# Anvisha: KCW Library Virtual Assistant 🤖📚
+# Anvisha: KCW Library Virtual Assistant 
 
 Anvisha is an intelligent, keyword-based chatbot designed for the **PSGR Krishnammal College for Women (KCW) Library**. It bridges the gap between traditional library services and modern information retrieval needs.
 
