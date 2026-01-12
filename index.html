@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <title>KCW Library Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="chat-launcher" onclick="toggleChat()">💬</button>
+    <div class="chatbot-container" id="bot-window">
+        <div class="header">
+            <span class="header-title">Anvisha</span>
+            <button onclick="endChat()" class="clear-btn">Clear</button>
+        </div>
+        <div id="chat-content" class="tab-content">
+            <div id="chat" class="messages"></div>
+            <div id="typing">Anvisha is typing...</div>
+            <div class="input-area">
+                <div id="suggestion-container" class="suggestion-box" style="display:none"></div>
+                <input id="msg" placeholder="Type a message..." oninput="showLiveSuggestions()" onkeypress="if(event.key==='Enter')send()">
+                <button onclick="send()" class="send-btn">➤</button>
+            </div>
+        </div>
+        <div id="faq-content" class="tab-content faq-view" style="display:none">
+            <input id="faq-search" class="search-bar" placeholder="🔍 Search library FAQs..." oninput="filterFAQList()">
+            <div id="admin-login-screen" class="admin-box" style="display:none">
+                <input type="email" id="admin-email" placeholder="Email" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px">
+                <input type="password" id="admin-password" placeholder="Password" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:8px">
+                <button onclick="loginAdmin()" style="width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px">LOGIN</button>
+                <button onclick="cancelAdmin()" style="width:100%;background:none;border:none;margin-top:10px;font-size:11px;color:#666">Go Back</button>
+            </div>
+            <div id="admin-panel" class="admin-box" style="display:none;border:2px solid var(--primary)">
+                <input id="admin-q" placeholder="The Question" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px">
+                <input id="admin-a" placeholder="The Answer" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px">
+                <input id="admin-k" placeholder="Keywords" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:8px">
+                <button onclick="addFAQ()" style="width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px">SAVE</button>
+                <button onclick="logoutAdmin()" style="width:100%;background:none;border:none;margin-top:10px;color:red">LOGOUT</button>
+            </div>
+            <div id="faq-list"></div>
+        </div>
+        <div class="tab-bar">
+            <button onclick="switchTab('chat')" id="btn-chat-tab" class="tab-btn active-tab">CHAT</button>
+            <button onclick="switchTab('faq')" id="btn-faq-tab" class="tab-btn">FAQ</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
